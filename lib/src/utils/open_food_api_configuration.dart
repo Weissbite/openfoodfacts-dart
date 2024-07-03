@@ -1,9 +1,14 @@
+import 'package:openfoodfacts/src/utils/dao_secured_string.dart';
+
 import '../model/user.dart';
 import '../model/user_agent.dart';
 import 'country_helper.dart';
 import 'http_helper.dart';
 import 'language_helper.dart';
 import 'uri_helper.dart';
+
+/// The key used for retrieving and storing the API Identifier in flutter secure storage
+const String _API_IDENTIFIER_KEY = 'API_IDENTIFIER';
 
 /// Allows to configure the behavior of the package.
 ///
@@ -60,6 +65,12 @@ class OpenFoodAPIConfiguration {
 
   ///Returns the [User] to use, using a default value
   static User? getUser(final User? user) => user ?? globalUser;
+
+  static Future<String?> getAPIIdentifier() async => await DaoSecuredString.get(_API_IDENTIFIER_KEY);
+
+  static Future<void> setAPIIdentifier(final String value) async {
+    await DaoSecuredString.put(key: _API_IDENTIFIER_KEY, value: value);
+  }
 
   /// Returns the most relevant country code
   static String? computeCountryCode(

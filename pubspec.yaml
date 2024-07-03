@@ -13,13 +13,14 @@ dependencies:
   http_parser: ^4.0.2
   path: ^1.9.0
   meta: ^1.8.0
+  flutter_secure_storage: 9.0.0
 
 dev_dependencies:
   analyzer: ^6.2.0
   build_runner: ^2.4.9
   json_serializable: ^6.8.0
   lints: ">=3.0.0 <5.0.0"
-  test: ^1.25.5
+  test: ^1.25.2
   coverage: ^1.8.0
 
 funding:

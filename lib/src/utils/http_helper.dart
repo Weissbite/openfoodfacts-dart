@@ -69,7 +69,7 @@ class HttpHelper {
   }) async {
     http.Response response = await http.get(
       uri,
-      headers: _buildHeaders(
+      headers: await _buildHeaders(
         user: user,
         uriHelper: uriHelper,
         addCredentialsToHeader: false,
@@ -105,7 +105,7 @@ class HttpHelper {
 
     return http.post(
       uri,
-      headers: _buildHeaders(
+      headers: await _buildHeaders(
         user: user,
         uriHelper: uriHelper,
         addCredentialsToHeader: addCredentialsToHeader,
@@ -123,7 +123,7 @@ class HttpHelper {
   }) async =>
       http.delete(
         uri,
-        headers: _buildHeaders(
+        headers: await _buildHeaders(
           user: user,
           uriHelper: uriHelper,
           addCredentialsToHeader: false,
@@ -158,7 +158,7 @@ class HttpHelper {
   }) async =>
       http.patch(
         uri,
-        headers: _buildHeaders(
+        headers: await _buildHeaders(
           user: user,
           uriHelper: uriHelper,
           addCredentialsToHeader: false,
@@ -180,7 +180,7 @@ class HttpHelper {
     var request = http.MultipartRequest('POST', uri);
 
     request.headers.addAll(
-      _buildHeaders(
+      await _buildHeaders(
         user: user,
         uriHelper: uriHelper,
         addCredentialsToHeader: false,
@@ -247,13 +247,13 @@ class HttpHelper {
   /// Returns the request headers.
   ///
   /// Note: [addCredentialsToHeader] and [isTestModeActive] exclude each other.
-  Map<String, String>? _buildHeaders({
+  Future<Map<String, String>?> _buildHeaders({
     User? user,
     required final UriHelper uriHelper,
     required bool addCredentialsToHeader,
     final String? bearerToken,
     final bool addCookieToHeader = false,
-  }) {
+  }) async {
     if (bearerToken != null) {
       return _getBearerHeader(bearerToken);
     }
@@ -283,7 +283,8 @@ class HttpHelper {
       if (myUser != null) {
         final String userId = myUser.userId;
         final String password = myUser.password;
-        var token = 'Basic ${base64Encode(utf8.encode('$userId:$password'))}';
+        final String apiIdentifier = await OpenFoodAPIConfiguration.getAPIIdentifier() ?? '';
+        var token = 'Basic ${base64Encode(utf8.encode('$userId:$password:$apiIdentifier'))}';
         headers.addAll({'Authorization': token});
       }
     }
